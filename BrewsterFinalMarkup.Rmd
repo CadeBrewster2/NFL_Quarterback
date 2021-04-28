@@ -1,0 +1,70 @@
+---
+title: "BrewsterFinalProject"
+author: "Cade Brewster"
+date: "4/26/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(tidyverse)
+library(ggthemes)
+NFL_QB_Data <- read.csv("NFL_QB_Data.csv")
+NFL <- as.data.frame(NFL_QB_Data)
+```
+
+## Introduction
+
+Many people believe that quarterback is the most important position on the football field, others would name a host of different positions as the most important. One thing that everyone will agree on is that quarterbacks are the highest paid position in the NFL. Luckily for fans of statistics, there are many different statistics that can paint a narrative of what makes a great quarterback. Most fans would not claim to know what statistic would contribute to the size of a quarterback’s salary. Quarterbacks like Dak Prescott have landed huge contracts from racking up a hefty amount of passing yards, others like Aaron Rodgers throw many touchdowns and few interceptions, and some like Deshaun Watson that excel in being an efficient passer. All three excel in different aspects and are some of the leagues top earners. A linear model takes a look into what variable best leads to these large contracts. NFL_QB_Data, or data about the starting quarterbacks in this past season of the NFL is analyzed to find what best contributes to these huge quarterback salaries. It contains a host of different statistics such as completion percentage, Passing Yards, Yards per Attempt, Touchdowns, Interceptions, Passer Rating, and Age as well as their salary for comparison.  
+
+```{r}
+#Look at correlation in data
+round(cor(NFL),2)
+#Age is the closet correlated to salary 
+
+#Creates model of Salary to Age
+NFL_Model <- lm(NFL$Age~NFL$Salary)
+#Line of best fit: Salary = Age(.4153) + 23.0173
+#RMSE:0.4437
+
+
+
+#Create Model of Passer Rating
+Pass_Model <- lm(NFL$Age~NFL$Rating)
+#Line of Best Fit: Passer Rating = .15(Age) + 14.6
+#RMSE: .08
+```
+
+## Analysis
+
+The test of correlation in the data set leads to the conclusion that age is by far the best predictor of salary. Any other statistic as a very weak correlation to how much a quarterback will make. To test and make sure this is accurate, a comparison is done between Passer Rating, an aggregated score based on several statistics, and age to see if it could be that these quarterbacks could just be getting more efficient over time, hence demanding a higher salary. This does show a slight positive correlation, but significantly less than age. This does make sense because the highest earners are mostly older quarterbacks like Russell Wilson, Tom Brady and Philip Rivers. The NFL has seen a rush of new talent in players like Lamar Jackson, Josh Allen, Baker Mayfield, Kyler Murray, and Patrick Mahomes to name a few who are some of the best quarterbacks in the league but are still on rookie contracts. This is not an unusual pattern for the NFL Quarterbacks because the best talent is going to get paid their respected amount, or if a quarterback proves to not be as good as once thought, they are pushed aside for new talent that can hopefully be the next Tom Brady or Aaron Rodgers. 
+
+## Visualization 
+
+```{r, echo=FALSE}
+#Creates Age viz
+NFL_Viz <- NFL %>% ggplot()
+AGE <- NFL_Viz + geom_point(aes(Salary,Age),col="orange") +
+  geom_abline(slope = .4153,intercept = 23.0173,col = "darkblue") +
+  labs(title="Linear Model: Salary as a function of Age",
+       x = "Salary in Millions",y="Age") + theme_few()
+
+#Create Passer Rating viz
+Pass_Viz <- NFL %>% ggplot()
+RATING <- Pass_Viz + geom_point(aes(Rating,Age),col="orange") +
+  geom_abline(slope = .15,intercept = 14.6,col = "darkblue") +
+  labs(title="Linear Model: Passer Rating as a function of Age",
+       x = "Passer Rating",y="Age") + theme_few()
+```
+
+```{r}
+AGE
+RATING
+```
+
+In the plot of the first model, there is a clear upward trajectory of quarterbacks making more as they get older. The outliers that can be seen are people like Dak Prescott and next season Patrick Mahomes as they are just fazing out of rookie contracts, signing huge contracts, but are still fairly young among starting quarterbacks in the league. In the second plot, it can be seen that there is a weak correlation in how well these quarterbacks perform based on their age. There is a slight upward trajectory, but not enough to justify the vast amount more those older quarterbacks get paid. 
+
+## Conclusion
+
+The NFL starting quarterbacks have a vast variety of different salaries. It’s found that they tend to make more as they get older, but that does not translate to performance. From a GM’s perspective, it would make sense to target quarterbacks in the first round of the draft instead of signing an experienced quarterback to a much higher salary. This trend can be seen in this years draft where it is rumored to have up to 6 quarterbacks taken in the first round. Not all of these will develop to be great picks. It does not take a deep dive into NFL Draft history to find the two highly rated Los Angeles prospects Sam Darnold and Josh Rosen who have proven to be busts. But it was also in that same draft that Lamar Jackson waited until the last pick in the first round to get selected by the Ravens. The Bears blunder cannot be forgotten where they picked Mitch Trubisky over Patrick Mahomes. Talented quarterbacks can be found outside the top 5 picks. They potentially offer great value for teams as the can spend more on other pieces of the team, look at the Chiefs. This is where rebuilding GM’s should be focusing their quarterback attention towards.
