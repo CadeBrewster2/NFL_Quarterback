@@ -1,1 +1,2 @@
 # NFL_Quarterback
+This project takes a look at what factors contribute to the size of an NFL quarterback’s salary. It looks at stats such as completion percentage, Yards Per Attempt, and Passer Rating. With the data, a correlation test is run then models are created off of that test. An analysis section is included as well as visualizations. In this project, there is a csv file with the raw data, a R file containing the raw code, and a markdown file in both R and Word.
